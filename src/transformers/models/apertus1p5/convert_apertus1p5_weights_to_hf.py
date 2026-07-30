@@ -16,8 +16,8 @@ Assemble a self-contained Apertus 1.5 checkpoint from three converted sources:
 
 1. An Apertus 1.5 causal-LM backbone with the enlarged input vocabulary. Released checkpoints use a pruned,
    text-only LM head whose physical width is recorded by `output_vocab_size`.
-2. The encode-only EMU3.5 vision tokenizer in `Apertus1p5VisionTokenizerModel` format, as produced by
-   `scripts/check_apertus1p5_vision_tokenizer_parity.py --save_converted`.
+2. The encode-only EMU3.5 vision tokenizer in `Apertus1p5VisionTokenizerModel` format: the original BAAI
+   weights with `decoder.*`/`post_quant_conv.*` dropped, saved with `save_pretrained` (strict 1:1 load).
 3. A WavTokenizer checkpoint produced by `convert_wavtokenizer_checkpoint.py`.
 
 Weights are mapped into `Apertus1p5ForConditionalGeneration` as follows:
