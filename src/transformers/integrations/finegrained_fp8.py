@@ -37,7 +37,7 @@ from .deepgemm import (
 )
 from .hub_kernels import _MISSING_KERNELS_MESSAGE, lazy_load_kernel
 from .moe import ExpertsInterface, use_experts_implementation
-from .tensor_parallel import to_local
+from ..distributed.utils import to_local
 
 
 logger = logging.get_logger(__name__)
