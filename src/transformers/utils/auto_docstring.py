@@ -2089,6 +2089,16 @@ class ModelArgs:
         "shape": None,
     }
 
+    mm_encoder_outputs = {
+        "description": """
+    Dict where keys are supported modalities and values are encoded outputs for that modality. Each encoded output is a tuple
+    that consists of (`pooler_output`, *optional*: `last_hidden_states`, *optional*: `hidden_states`, *optional*: `attentions`)
+    `pooler_output` of shape `(batch_size, sequence_length, hidden_size)`, *optional*) is a sequence of
+    multimmodal features of the encoder merged into text embeddings.
+    """,
+        "shape": None,
+    }
+
     output_router_logits = {
         "description": """
     Whether or not to return the logits of all the routers. They are useful for computing the router loss, and
@@ -2117,6 +2127,13 @@ class ModelArgs:
         "shape": "of shape `(batch_size, num_channels, image_size, image_size)`",
     }
 
+    image_outputs = {
+        "description": """
+    The output dict corresponding to an encoded image. It can be obtained using [`model.get_image_features()`].
+    """,
+        "shape": "of shape `(batch_size, image_seq_length, projected_hidden_dim)`",
+    }
+
     pixel_values_videos = {
         "description": """
     The tensors corresponding to the input video. Pixel values for videos can be obtained using
@@ -2124,6 +2141,13 @@ class ModelArgs:
     [`{video_processor_class}`] for processing videos).
     """,
         "shape": "of shape `(batch_size, num_frames, num_channels, frame_size, frame_size)`",
+    }
+
+    video_outputs = {
+        "description": """
+    The output dict corresponding to an encoded video. It can be obtained using [`model.get_video_features()`].
+    """,
+        "shape": "of shape `(batch_size, video_seq_length, projected_hidden_dim)`",
     }
 
     vision_feature_layer = {

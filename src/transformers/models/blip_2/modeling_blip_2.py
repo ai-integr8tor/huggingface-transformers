@@ -1604,6 +1604,7 @@ class Blip2ForConditionalGeneration(Blip2PreTrainedModel, GenerationMixin):
         decoder_input_ids: torch.LongTensor | None = None,
         decoder_attention_mask: torch.LongTensor | None = None,
         inputs_embeds: torch.FloatTensor | None = None,
+        mm_encoder_outputs: dict[str, BaseModelOutputWithPooling] | None = None,
         labels: torch.LongTensor | None = None,
         interpolate_pos_encoding: bool = False,
         **kwargs: Unpack[TransformersKwargs],
@@ -1684,12 +1685,15 @@ class Blip2ForConditionalGeneration(Blip2PreTrainedModel, GenerationMixin):
         two
         ```"""
 
-        image_features: BaseModelOutputWithVisionQformerOutputs = self.get_image_features(
-            pixel_values, interpolate_pos_encoding=interpolate_pos_encoding, return_dict=True
-        )
-        language_model_inputs = image_features.pooler_output
-        qformer_outputs = image_features.qformer_outputs
-        vision_outputs = image_features.vision_outputs
+        mm_encoder_outputs = mm_encoder_outputs if mm_encoder_outputs else {}
+        if mm_encoder_outputs.get("images") is None:
+            mm_encoder_outputs["images"]: BaseModelOutputWithVisionQformerOutputs = self.get_image_features(
+                pixel_values, interpolate_pos_encoding=interpolate_pos_encoding, return_dict=True
+            )
+
+        language_model_inputs = mm_encoder_outputs["images"].pooler_output
+        qformer_outputs = mm_encoder_outputs["images"].qformer_outputs
+        vision_outputs = mm_encoder_outputs["images"].vision_outputs
 
         if inputs_embeds is None:
             inputs_embeds = self.get_input_embeddings()(input_ids)
